@@ -9,6 +9,7 @@ def get_all_user():
 
 # Crear un nuevo usuario
 def create_user(data):
+    print("Datos recibidos para crear usuario:", data)
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")

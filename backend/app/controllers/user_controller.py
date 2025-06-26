@@ -1,15 +1,9 @@
+# app/controllers/user_controller.py
 from app.models.user_model import User
 from app.models import db
-from werkzeug.security import generate_password_hash
+from flask import jsonify
 
-# Obtener todos los usuarios
-def get_all_user():
-    users = User.query.all()
-    return [u.to_dict() for u in users]
-
-# Crear un nuevo usuario
-def create_user(data):
-    print("Datos recibidos para crear usuario:", data)
+def register_user(data):
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
@@ -20,11 +14,20 @@ def create_user(data):
     if User.query.filter_by(username=username).first():
         return {"error": "El usuario ya existe"}, 409
 
-    # Encriptar la contraseña antes de guardarla
-    hashed_password = generate_password_hash(password)
-
-    new_user = User(username=username, email=email, password=hashed_password)
+    new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
 
-    return {"message": "Usuario creado correctamente"}, 201
+    return {"message": "Usuario registrado"}, 201
+
+def login_user(data):
+    username = data.get("username")
+    password = data.get("password")
+
+    user = User.query.filter_by(username=username, password=password).first()
+
+    if not user:
+        return {"error": "Credenciales inválidas"}, 401
+
+    print("Credenciales validas")
+    return {"message": "Inicio de sesión exitoso", "user": user.to_dict()}, 200

@@ -32,6 +32,7 @@ def login_user(data):
     user = User.query.filter_by(username=username).first()
 
     if not user or not check_password_hash(user.password, password):
+        print("Credenciales inválidas")
         return {"error": "Credenciales inválidas"}, 401
 
     print("Credenciales válidas")

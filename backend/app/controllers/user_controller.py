@@ -38,3 +38,5 @@ def login_user(data):
     print("Credenciales válidas")
     return {"message": "Inicio de sesión exitoso", "user": user.to_dict()}, 200
 
+
+
